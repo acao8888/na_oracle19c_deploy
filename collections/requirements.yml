@@ -1,3 +1,4 @@
 ---
 collections:
-  - netapp.ontap
+  - name: netapp.ontap
+    version: '>=21.2.0'
