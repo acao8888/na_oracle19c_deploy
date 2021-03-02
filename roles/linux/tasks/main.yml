@@ -1,1 +1,43 @@
 ---
+- block:
+    - name: task1
+      include_tasks: task_1.yml
+      tags:
+        - cre_mount_points
+        - mount_host_datastores
+          
+- block:
+    - name: task2
+      include_tasks: task_2.yml
+      tags:
+        - preinstall_rpm
+- block:
+    - name: task3
+      include_tasks: task_3.yml
+      tags:
+        - oracle_base
+        - oracle_data
+        - oracle_reco
+- block:
+    - name: task4
+      include_tasks: task_4.yml
+      tags:
+        - disable_thp
+        - config_hugepages
+- block:
+    - name: task5
+      include_tasks: task_5.yml
+      tags:
+        - disable_selinux
+        - disable_firewall
+- block:
+    - name: task6
+      include_tasks: task_6.yml
+      tags:
+        - update_ntp_server
+- block:
+    - name: task7
+      include_tasks: task_7.yml
+- block:
+    - name: task8
+      include_tasks: task_8.yml

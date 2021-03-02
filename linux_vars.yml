@@ -1,0 +1,35 @@
+#####################################
+### Linux configuration variables ###
+#####################################
+
+# Set OS option: Linux [ OL - Oracle Linux | RHEL - RedHat | SLES - SUSE ]
+os: OL
+
+# Set DB version specific OL rpm: [ oracle-database-server-12cR2-preinstall | oracle-database-preinstall-19c ]
+preinstall_rpm: oracle-database-preinstall-19c
+
+# Oracle storage based on storage type: FS [ oracle_base: /u01/app/oracle, oracle_data:/u02/oradata, oracle_reco:/u03/orareco ]; ASM [ oracle_base: /u01/app/oracle, oracle_data: +DATA, oracle_reco: +RECO ]
+storage_type: FS
+oracle_base: /u01/app/oracle
+grid_base: /u01/app/grid
+oracle_data: /u02/oradata
+oracle_reco: /u03/orareco
+
+oracle_user: oracle
+oracle_install_group: oinstall
+grid_user: grid
+grid_user_id: 54331
+grid_groups:
+  - {name: asmdba, id: 54327}
+  - {name: asmoper, id: 54328}
+  - {name: asmadmin, id: 54329}
+  - {name: dba, id: 54322}
+  - {name: racdba, id: 54330}
+
+# Half of node  memory size divided by 2mb
+hugepages_nr: 8192
+
+mount_points:
+  - /u01
+  - /u02
+  - /u03
