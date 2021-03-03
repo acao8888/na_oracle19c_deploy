@@ -33,3 +33,11 @@ mount_points:
   - /u01
   - /u02
   - /u03
+
+sprotocol: NFS
+
+# NFS storage parameters when sprotocol set to NFS
+volumes_nfs:
+  - {vol_name: rtpora03_u01, aggr_name: aggr01_node01, lif: 172.21.94.200, size: 25}
+  - {vol_name: rtpora03_u02, aggr_name: aggr01_node01, lif: 172.21.94.200, size: 100}
+  - {vol_name: rtpora03_u03, aggr_name: aggr01_node01, lif: 172.21.94.200, size: 100}

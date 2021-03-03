@@ -21,6 +21,6 @@
   become: true
   with_together:
     - '{{ mount_points }}'
-    - '{{ host_datastores_nfs }}'
+    - '{{ volumes_nfs }}'
   tags:
     - mount_host_datastores
