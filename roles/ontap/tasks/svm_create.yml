@@ -1,11 +1,12 @@
 ---
 #Generate an Aggreate list to use for the SVM Creation
-- block:
+- vars:
+    aggr_list: []
+  block:
     - name: Generate the aggr list variable for Oracle SVM
       set_fact:
-        aggr_list: "{{ aggr_list }} + [ '{{ item.aggr_name }}' ]"
-      with_items:
-        - "{{ data_aggregates }}"
+        aggr_list: "{{ aggr_list + [item.aggr_name] }}"
+      with_items: "{{ data_aggregates }}"
       failed_when: item.aggr_name == None or item.aggr_name == ""
   tags:
     - ontap_config_svm
