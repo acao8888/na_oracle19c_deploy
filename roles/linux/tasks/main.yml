@@ -1,43 +1,49 @@
 ---
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# This playbook contains all the plays for oracle-linux 8.2 tasks.
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
 - block:
-    - name: task1
-      include_tasks: task_1.yml
+    - name: Create mount points for NFS file systems
+      include_tasks: mount_points.yml
       tags:
         - cre_mount_points
         - mount_host_datastores
           
 - block:
-    - name: task2
-      include_tasks: task_2.yml
+    - name: Install required packages, create oracle user and groups
+      include_tasks: preinstall_rpm.yml
       tags:
         - preinstall_rpm
 - block:
-    - name: task3
-      include_tasks: task_3.yml
+    - name: Create Oracle base directories
+      include_tasks: create_database.yml
       tags:
         - oracle_base
         - oracle_data
         - oracle_reco
 - block:
-    - name: task4
-      include_tasks: task_4.yml
+    - name: Disable transparent hugepages and configure kernel for hugepages
+      include_tasks: huge_pages.yml
       tags:
         - disable_thp
         - config_hugepages
 - block:
-    - name: task5
-      include_tasks: task_5.yml
+    - name: Disable firewall deamon/SELinux
+      include_tasks: disable_se.yml
       tags:
         - disable_selinux
         - disable_firewall
 - block:
-    - name: task6
-      include_tasks: task_6.yml
+    - name: Update ntp servers to chronyd, default ntp servers not working
+      include_tasks: update_ntp.yml
       tags:
         - update_ntp_server
 - block:
-    - name: task7
-      include_tasks: task_7.yml
+    - name: Increase file descriptor hard limit
+      include_tasks: descriptor_limit.yml
 - block:
-    - name: task8
-      include_tasks: task_8.yml
+    - name:  Create a pam.d session file
+      include_tasks: session_files.yml
