@@ -1,22 +1,52 @@
 ---
 # ----------------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------------
-# This playbook contains all the plays for oracle-linux 8.2 tasks.
+# Create mount points for NFS file systems
+# Mount NFS file systems on Oracle hosts
 # ----------------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------------
 
 - block:
-    - name: Create mount points for NFS file systems
+    - name: Create mount points for NFS file systems / Mount NFS file systems on Oracle hosts
       include_tasks: mount_points.yml
       tags:
         - cre_mount_points
         - mount_host_datastores
-          
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Create mount points for NFS file systems] FAILED. Hints:"
+          - 1. Check the failure error message.
+          - 2. Check whether the task file exists.
+          - 3. Check whether the task file name and extension is correct.
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# Install required packages, create oracle user and groups
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+      
 - block:
-    - name: Install required packages, create oracle user and groups
+    - name: Install required packages
       include_tasks: preinstall_rpm.yml
       tags:
         - preinstall_rpm
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Install required packages, create oracle user and groups] FAILED. Hints:"
+          - 1. Check the failure error message.
+          - 2. Check whether the task file exists.
+          - 3. Check whether the task file name and extension is correct.
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# Create Oracle base directory
+# Create Oracle data directory
+# Create Oracle recovery directory
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
 - block:
     - name: Create Oracle base directories
       include_tasks: create_database.yml
@@ -24,26 +54,112 @@
         - oracle_base
         - oracle_data
         - oracle_reco
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Create Oracle base directories] FAILED. Hints:"
+          - 1. Check the failure error message.
+          - 2. Check whether the task file exists.
+          - 3. Check whether the task file name and extension is correct.
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# Disable transparent hugepages in current system
+# Disable transparent hugepages at reboot
+# Configure Kernel for hugepages
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
 - block:
     - name: Disable transparent hugepages and configure kernel for hugepages
       include_tasks: huge_pages.yml
       tags:
         - disable_thp
         - config_hugepages
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Disable transparent hugepages and configure kernel for hugepages] FAILED. Hints:"
+          - 1. Check the failure error message.
+          - 2. Check whether the task file exists.
+          - 3. Check whether the task file name and extension is correct.
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# Disable SELinux
+# Disable Firewall Deamon
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
 - block:
     - name: Disable firewall deamon/SELinux
       include_tasks: disable_se.yml
       tags:
         - disable_selinux
         - disable_firewall
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Disable firewall deamon (firewalld)] FAILED. Hints:"
+          - 1. Check the failure error message
+          - 2. Check vars file to ensure there is no discrepancy in the variable declaration
+          - 3. Ensure that there is no residual configuration on the switch that can cause failure of this task
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# Update ntp servers to chronyd, default ntp servers not working
+# Restart chronyd service
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
 - block:
-    - name: Update ntp servers to chronyd, default ntp servers not working
+    - name: Update ntp servers to chronyd and Restart chronyd service
       include_tasks: update_ntp.yml
       tags:
         - update_ntp_server
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Restart chronyd service] FAILED. Hints:"
+          - 1. Check the failure error message
+          - 2. Check vars file to ensure there is no discrepancy in the variable declaration
+          - 3. Ensure that there is no residual configuration on the switch that can cause failure of this task
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# Increase file descriptor hard limit
+# Increase min stack size
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
 - block:
     - name: Increase file descriptor hard limit
       include_tasks: descriptor_limit.yml
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Increase file descriptor hard limit] FAILED. Hints:"
+          - 1. Check the failure error message
+          - 2. Check vars file to ensure there is no discrepancy in the variable declaration
+          - 3. Ensure that there is no residual configuration on the switch that can cause failure of this task
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# Create pam.d Session File
+# Enable limits change without reboot
+# Create a pam.d Session non-interactive file
+# Add a line to enable limits change without reboot
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
 - block:
-    - name:  Create a pam.d session file
+    - name:  Create Session Files
       include_tasks: session_files.yml
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Add a line to enable limits change without reboot] FAILED. Hints:"
+          - 1. Check the failure error message
+          - 2. Check vars file to ensure there is no discrepancy in the variable declaration
+          - 3. Ensure that there is no residual configuration on the switch that can cause failure of this task

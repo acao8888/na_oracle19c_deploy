@@ -1,7 +1,8 @@
 - name: Linux Setup for Oracle 
-  hosts: "{{ hosts | default ('linux') }}"
+  hosts: "{{ hosts | default ('Oracle') }}"
   gather_facts: False   
-  vars_files: linux_vars.yml
+  vars_files:
+    - roles/linux/defaults/main.yml 
   roles:
     - role: linux
       #  tags:

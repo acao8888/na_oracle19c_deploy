@@ -1,20 +1,39 @@
 ---
-- name: Update ntp servers to chronyd, default ntp servers not working
-  replace:
-    path: /etc/chrony.conf
-    regexp: '^server {{ item }}.ol.pool.ntp.org iburst'
-    replace: 'server {{ item }}.us.pool.ntp.org iburst'
-  loop:
-    - 0
-    - 1
-    - 2
-    - 3
-  become: true
-  tags:
-    - update_ntp_server
-
-- name: Restart chronyd service
-  service:
-    name: chronyd
-    state: restarted
-  become: true
+# Update NTP SERVER
+- block:
+   - name: Update ntp servers to chronyd, default ntp servers not working
+     replace:
+       path: /etc/chrony.conf
+       regexp: '^server {{ item }}.ol.pool.ntp.org iburst'
+       replace: 'server {{ item }}.us.pool.ntp.org iburst'
+     loop:
+       - 0
+       - 1
+       - 2
+       - 3
+     become: true
+     tags:
+     - update_ntp_server
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Update ntp servers to chronyd, default ntp servers not working] FAILED. Hints:"
+          - 1. Check the failure error message
+          - 2. Check vars file to ensure there is no discrepancy in the variable declaration
+          - 3. Ensure that there is no residual configuration on the switch that can cause failure of this task
+#Restart chronyd service
+- block: 
+   - name: Restart chronyd service
+     service:
+       name: chronyd
+       state: restarted
+     become: true
+  rescue:
+    - name: Failure message
+      debug:
+        msg:
+          - "TASK [Restart chronyd service] FAILED. Hints:"
+          - 1. Check the failure error message
+          - 2. Check vars file to ensure there is no discrepancy in the variable declaration
+          - 3. Ensure that there is no residual configuration on the switch that can cause failure of this task
