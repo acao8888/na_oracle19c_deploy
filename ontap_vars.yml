@@ -23,7 +23,7 @@ data_aggregates:
   - {aggr_name: aggr01_node02}
 
 #SVM Name
-svm_name: ora_svm_suf
+svm_name: ora_svm_suf2
 
 # Root volume for infrastructure svm
 #svm_root_volume: "svm_root"
